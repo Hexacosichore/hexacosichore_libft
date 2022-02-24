@@ -23,9 +23,7 @@ static int	gnl_read(char **buff_s, char **line, int fd, int bli)
 		ret = read(fd, buff, 32);
 		if (ret <= 0)
 		{
-			if (buff_s)
-				free(*buff_s);
-			*buff_s = NULL;
+			ft_strdel(buff_s);
 			return (*line && (*line)[0] != '\0');
 		}
 		buff[ret] = '\0';
@@ -43,11 +41,11 @@ static int	gnl_read(char **buff_s, char **line, int fd, int bli)
 
 char	*get_next_line(int fd)
 {
-	static char		*data[42];
+	static char		*data[OPEN_MAX];
 	char			*line;
 
 	line = NULL;
-	if (fd < 32 && fd >= 0 && !gnl_read(&(data[fd]), &line, fd, 0))
+	if (fd < OPEN_MAX && fd >= 0 && !gnl_read(&(data[fd]), &line, fd, 0))
 	{
 		free(line);
 		line = NULL;
